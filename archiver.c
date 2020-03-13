@@ -8,6 +8,7 @@
 #include <string.h>
 #include <ctype.h>
 #define maxlength 256
+#define bufsize 1024
 
 typedef struct
 {
@@ -238,7 +239,7 @@ void ArchiveFile(char* filename)
 {
   int fd;
   Fileinfo fileinfo;
-  char buf[1024];
+  char buf[bufsize];
   struct stat statbuf;
   if ((fd=open(filename,O_RDONLY))==NULL)
     {
@@ -393,18 +394,18 @@ while (sizeArc>0)//пока архив не кончился
         fprintf(stderr,"cannot create file: %s\n",unpackFile);
         exit(1);
       }
-      char buffer[1024];
+      char buffer[bufsize];
       int nread;
       while(sizefile>0)
       {
-        if(sizefile<1024)
+        if(sizefile<bufsize)
         {
           nread=read(fdArchive,buffer,sizefile);
           sizefile=0;
         }
         else
         {
-          nread=read(fdArchive,buffer,1024);
+          nread=read(fdArchive,buffer,bufsize);
           sizefile-=nread;
         }
         write(fd,buffer,nread);
@@ -478,7 +479,7 @@ void Add(char* archive,char* filename)
   if (same)//если в архиве есть файл или директория с таким же именем
   {
     int fd;
-    char buf[1024];
+    char buf[bufsize];
     char temp[]="temp_fileXXXXXX";
     if ((fd=mkstemp(temp))==NULL)//создание временнного файла
     {
