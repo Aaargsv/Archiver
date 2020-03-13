@@ -107,9 +107,10 @@ int main(int argc, char**argv)
   char current_directory[maxlength];
   char* end;// указатель для разделения директории и файла
   getcwd(current_directory,maxlength);
+
   if (pack)
   {
-    if ((fdArchive=creat(*argv,S_IRUSR|S_IWUSR))==NULL)
+    if ((fdArchive=creat(*argv,S_IRUSR|S_IWUSR))==0)
       {
         fprintf(stderr,"cannot create file: %s\n",*argv);
         perror("ERROR:");
@@ -152,7 +153,7 @@ int main(int argc, char**argv)
 
   if (unpack)
   {
-    if ((fdArchive=open(*argv,O_RDONLY))==NULL)
+    if ((fdArchive=open(*argv,O_RDONLY))==0)
       {
         fprintf(stderr,"cannot open file: %s\n",*argv);
         perror("ERROR:");
@@ -165,7 +166,7 @@ int main(int argc, char**argv)
 
   if (add)
   {
-    if ((fdArchive=open(*argv,O_RDWR))==NULL)
+    if ((fdArchive=open(*argv,O_RDWR))==0)
     {
       fprintf(stderr,"cannot open file: %s\n",*argv);
       perror("ERROR:");
@@ -241,7 +242,7 @@ void ArchiveFile(char* filename)
   Fileinfo fileinfo;
   char buf[bufsize];
   struct stat statbuf;
-  if ((fd=open(filename,O_RDONLY))==NULL)
+  if ((fd=open(filename,O_RDONLY))==0)
     {
       fprintf(stderr,"cannot open file: %s\n",filename);
       exit(1);
@@ -389,7 +390,7 @@ while (sizeArc>0)//пока архив не кончился
   strcpy(unpackFile+strlen(unpackFile),fileinfo.name);//полный путь файла для сохранения
 
   int fd;
-  if ((fd=creat(unpackFile, S_IRWXU|S_IRGRP|S_IXGRP))==NULL)
+  if ((fd=creat(unpackFile, S_IRWXU|S_IRGRP|S_IXGRP))==0)
   {
         fprintf(stderr,"cannot create file: %s\n",unpackFile);
         exit(1);
@@ -481,7 +482,7 @@ void Add(char* archive,char* filename)
     int fd;
     char buf[bufsize];
     char temp[]="temp_fileXXXXXX";
-    if ((fd=mkstemp(temp))==NULL)//создание временнного файла
+    if ((fd=mkstemp(temp))==0)//создание временнного файла
     {
       fprintf(stderr,"cannot create temporary file\n");
       perror("ERROR:");
@@ -547,7 +548,7 @@ void Add(char* archive,char* filename)
     lseek(fd,0,SEEK_SET);
     close(fdArchive);
 
-    if ((fdArchive=open(archive,O_RDWR | O_TRUNC))==NULL)//повторное открытие архива
+    if ((fdArchive=open(archive,O_RDWR | O_TRUNC))==0)//повторное открытие архива
     {
       fprintf(stderr,"cannot open file: %s\n",archive);
       exit(1);
